@@ -1,6 +1,6 @@
 {
   "name": "timezone-date-utils",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Comprehensive date and time utilities using moment-timezone with IST as default timezone. Works seamlessly in both Node.js backend and browser frontend environments.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -56,7 +56,6 @@
   },
   "homepage": "https://github.com/digistayai/date-utils#readme",
   "peerDependencies": {
-    "moment": "^2.30.0",
     "moment-timezone": "^0.5.48"
   },
   "devDependencies": {
@@ -66,7 +65,6 @@
     "vitest": "^4.0.15"
   },
   "dependencies": {
-    "moment": "^2.30.0",
     "moment-timezone": "^0.5.48"
   },
   "engines": {

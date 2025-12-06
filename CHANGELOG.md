@@ -5,10 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-12-06
+
+### Changed
+- **BREAKING**: Package renamed from `@digistay/date-utils` to `timezone-date-utils`
+- Removed redundant `moment` dependency (moment-timezone already includes it)
+- Updated all documentation with correct package name
+- Lighter and more optimized package
+
+### Dependencies
+- moment-timezone: ^0.5.48 (moment.js is included)
+
 ## [1.0.0] - 2025-12-06
 
 ### Added
-- Initial release of @digistay/date-utils
+- Initial release of timezone-date-utils
 - 60+ date and time utility functions
 - Full TypeScript support with type definitions
 - Support for both ESM and CJS module systems

@@ -1,5 +1,5 @@
 /**
- * Example usage of @digistay/date-utils
+ * Example usage of timezone-date-utils
  * This example works in both Node.js and browser environments
  */
 
@@ -17,9 +17,9 @@ import {
   getCheckOutTime,
   TIMEZONES,
   DATE_FORMATS,
-} from '@digistay/date-utils';
+} from 'timezone-date-utils';
 
-// For CommonJS: const { now, createDate, ... } = require('@digistay/date-utils');
+// For CommonJS: const { now, createDate, ... } = require('timezone-date-utils');
 
 console.log('=== Date Utils Examples ===\n');
 
@@ -58,7 +58,7 @@ const newYorkTime = now(TIMEZONES.EST);
 console.log('\n7. Current time in New York:', formatDisplayWithTime(newYorkTime));
 
 // 8. Date ranges
-import { dateRange } from '@digistay/date-utils';
+import { dateRange } from 'timezone-date-utils';
 const allDates = dateRange('2025-12-15', '2025-12-18');
 console.log('\n8. All dates in range:');
 allDates.forEach(date => {
@@ -67,7 +67,7 @@ allDates.forEach(date => {
 
 console.log('\n=== Frontend Usage Example (React) ===\n');
 console.log(`
-import { now, formatDisplay, calculateNights } from '@digistay/date-utils';
+import { now, formatDisplay, calculateNights } from 'timezone-date-utils';
 import { useState, useEffect } from 'react';
 
 function BookingComponent({ checkIn, checkOut }) {
@@ -92,7 +92,7 @@ function BookingComponent({ checkIn, checkOut }) {
 
 console.log('\n=== Backend Usage Example (Node.js) ===\n');
 console.log(`
-import { createDate, calculateNights, formatDisplay } from '@digistay/date-utils';
+import { createDate, calculateNights, formatDisplay } from 'timezone-date-utils';
 
 async function processBooking(bookingData) {
   const checkIn = createDate(bookingData.checkInDate);

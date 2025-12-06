@@ -1,10 +1,10 @@
-# @digistay/date-utils
+# timezone-date-utils
 
 A comprehensive date and time utility library for both frontend and backend JavaScript/TypeScript applications.
 
 ## Quick Links
 
-- [NPM Package](https://www.npmjs.com/package/@digistay/date-utils)
+- [NPM Package](https://www.npmjs.com/package/timezone-date-utils)
 - [GitHub Repository](https://github.com/digistayai/date-utils)
 - [Documentation](https://github.com/digistayai/date-utils#readme)
 

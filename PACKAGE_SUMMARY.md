@@ -1,4 +1,4 @@
-# 📦 @digistay/date-utils - Package Summary
+# 📦 timezone-date-utils - Package Summary
 
 ## ✅ Package Created Successfully!
 
@@ -19,15 +19,14 @@ Your npm package is now ready to use in both **frontend** and **backend** projec
 
 ### 📦 Package Details
 
-**Name:** `@digistay/date-utils`
-**Version:** 1.0.0
+**Name:** `timezone-date-utils`
+**Version:** 1.0.1
 **License:** MIT
 
 ### 🔧 Updated Packages (No Deprecated Dependencies)
 
 **Dependencies:**
-- moment: ^2.30.0
-- moment-timezone: ^0.5.48
+- moment-timezone: ^0.5.48 (includes moment.js)
 
 **Dev Dependencies:**
 - TypeScript: ^5.7.2 (latest)
@@ -77,16 +76,16 @@ digistay-date-utils/
 cd /Users/vishalmeena111/Desktop/DIGISTAY/digistay-date-utils
 npm link
 
-# In your project directory (backend or frontend)
+**In your project directory (backend or frontend)
 cd /path/to/your/project
-npm link @digistay/date-utils
+npm link timezone-date-utils
 ```
 
 #### 2️⃣ Backend Usage (Node.js/NestJS)
 
 ```typescript
 // hotel-backend/src/some-file.ts
-import { now, formatDisplay, calculateNights } from '@digistay/date-utils';
+import { now, formatDisplay, calculateNights } from 'timezone-date-utils';
 
 const checkIn = '2025-12-15';
 const checkOut = '2025-12-18';
@@ -97,7 +96,7 @@ const nights = calculateNights(checkIn, checkOut); // 3
 
 ```typescript
 // guest-frontend/src/components/BookingCard.tsx
-import { formatDisplay, isWeekend } from '@digistay/date-utils';
+import { formatDisplay, isWeekend } from 'timezone-date-utils';
 
 export function BookingCard({ date }) {
   return (

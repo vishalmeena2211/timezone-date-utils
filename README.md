@@ -1,4 +1,4 @@
-# @digistay/date-utils
+# timezone-date-utils
 
 Comprehensive date and time utilities using moment-timezone with IST (Indian Standard Time) as the default timezone. Built for hotel management systems with specific hotel operations support. **Works seamlessly in both Node.js backend and browser frontend environments.**
 
@@ -17,17 +17,17 @@ Comprehensive date and time utilities using moment-timezone with IST (Indian Sta
 ## 📦 Installation
 
 ```bash
-npm install @digistay/date-utils
+npm install timezone-date-utils
 # or
-yarn add @digistay/date-utils
+yarn add timezone-date-utils
 # or
-pnpm add @digistay/date-utils
+pnpm add timezone-date-utils
 ```
 
 ### Peer Dependencies
 
 ```bash
-npm install moment moment-timezone
+npm install moment-timezone
 ```
 
 ## 🚀 Usage
@@ -35,9 +35,9 @@ npm install moment moment-timezone
 ### Backend (Node.js / NestJS / Express)
 
 ```typescript
-import * as DateUtil from '@digistay/date-utils';
+import * as DateUtil from 'timezone-date-utils';
 // or
-import { now, formatDisplay, calculateNights } from '@digistay/date-utils';
+import { now, formatDisplay, calculateNights } from 'timezone-date-utils';
 
 // Get current time in IST
 const currentTime = DateUtil.now();
@@ -57,7 +57,7 @@ const nights = DateUtil.calculateNights(checkIn, checkOut); // 3
 
 ```typescript
 // React example
-import { now, formatDisplay, isWeekend } from '@digistay/date-utils';
+import { now, formatDisplay, isWeekend } from 'timezone-date-utils';
 import { useEffect, useState } from 'react';
 
 function DateDisplay() {
@@ -79,7 +79,7 @@ function DateDisplay() {
 // Next.js example
 'use client';
 
-import { calculateNights, formatDisplay } from '@digistay/date-utils';
+import { calculateNights, formatDisplay } from 'timezone-date-utils';
 
 export default function BookingCalculator({ checkIn, checkOut }) {
   const nights = calculateNights(checkIn, checkOut);
@@ -297,7 +297,7 @@ DateUtil.formatDuration(300000); // "5m"
 ## 🌍 Timezones
 
 ```typescript
-import { TIMEZONES } from '@digistay/date-utils';
+import { TIMEZONES } from 'timezone-date-utils';
 
 // Available timezones
 TIMEZONES.IST // 'Asia/Kolkata' (default)
@@ -321,7 +321,7 @@ import {
   BUSINESS_DAYS,
   WEEKEND_DAYS,
   MILLISECONDS_IN,
-} from '@digistay/date-utils';
+} from 'timezone-date-utils';
 
 // Date formats
 DATE_FORMATS.ISO_DATE // 'YYYY-MM-DD'
@@ -354,7 +354,7 @@ import type {
   BookingDates,
   CalendarDay,
   Moment,
-} from '@digistay/date-utils';
+} from 'timezone-date-utils';
 ```
 
 ## 🎯 Common Use Cases
@@ -362,7 +362,7 @@ import type {
 ### Booking System
 
 ```typescript
-import { calculateNights, formatDisplay, isWeekend } from '@digistay/date-utils';
+import { calculateNights, formatDisplay, isWeekend } from 'timezone-date-utils';
 
 function calculateBooking(checkIn: string, checkOut: string) {
   const nights = calculateNights(checkIn, checkOut);
@@ -380,7 +380,7 @@ function calculateBooking(checkIn: string, checkOut: string) {
 ### Availability Calendar
 
 ```typescript
-import { dateRange, isWeekend, isPast } from '@digistay/date-utils';
+import { dateRange, isWeekend, isPast } from 'timezone-date-utils';
 
 function getCalendarDays(startDate: string, endDate: string) {
   const dates = dateRange(startDate, endDate);
@@ -397,7 +397,7 @@ function getCalendarDays(startDate: string, endDate: string) {
 ### Report Generation
 
 ```typescript
-import { getThisMonthRange, formatDisplay } from '@digistay/date-utils';
+import { getThisMonthRange, formatDisplay } from 'timezone-date-utils';
 
 function generateMonthlyReport() {
   const { start, end } = getThisMonthRange();

@@ -1,5 +1,5 @@
 /**
- * @digistay/date-utils
+ * timezone-date-utils
  * 
  * Comprehensive date and time utilities using moment-timezone
  * Works seamlessly in both Node.js backend and browser frontend environments
