@@ -1,0 +1,75 @@
+{
+  "name": "timezone-date-utils",
+  "version": "1.0.0",
+  "description": "Comprehensive date and time utilities using moment-timezone with IST as default timezone. Works seamlessly in both Node.js backend and browser frontend environments.",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "date",
+    "time",
+    "datetime",
+    "timezone",
+    "moment",
+    "moment-timezone",
+    "ist",
+    "hotel",
+    "booking",
+    "utilities",
+    "frontend",
+    "backend",
+    "universal",
+    "isomorphic"
+  ],
+  "author": "DigiStay",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digistayai/date-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digistayai/date-utils/issues"
+  },
+  "homepage": "https://github.com/digistayai/date-utils#readme",
+  "peerDependencies": {
+    "moment": "^2.30.0",
+    "moment-timezone": "^0.5.48"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@vitest/ui": "^4.0.15",
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.15"
+  },
+  "dependencies": {
+    "moment": "^2.30.0",
+    "moment-timezone": "^0.5.48"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
