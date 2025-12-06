@@ -204,6 +204,131 @@ DateUtil.isPast(date);
 DateUtil.isFuture(date);
 DateUtil.isWeekend(date);
 DateUtil.isWeekday(date);
+
+// Validation helpers
+DateUtil.isValidYYYYMMDD('2025-12-15'); // true
+DateUtil.isValidDDMMYYYY('15-12-2025'); // true
+DateUtil.isValidDDMMYYYYSlash('15/12/2025'); // true
+DateUtil.isSameDay(date1, date2); // Compare dates ignoring time
+```
+
+### Age Calculation
+
+```typescript
+// Calculate age from date of birth
+const age = DateUtil.calculateAge('1990-05-15'); // Current age
+
+// Calculate age from DD/MM/YYYY format
+const ageFromIndian = DateUtil.calculateAgeFromDDMMYYYY('15/05/1990'); // 34
+
+// Get detailed age
+const detailedAge = DateUtil.getDetailedAge('1990-05-15');
+// { years: 34, months: 7, days: 1 }
+```
+
+### Date/Time Separation
+
+```typescript
+const dateTime = DateUtil.createDate('2025-12-15 14:30:00');
+
+// Separate into date and time
+const { date, time } = DateUtil.separateDateTime(dateTime);
+// date: "15-12-2025", time: "14:30"
+
+// With AM/PM format
+const separated = DateUtil.separateDateTimeWithAMPM(dateTime);
+// { date: "15-12-2025", time: "02:30 PM" }
+```
+
+### Indian/Specialized Formatting
+
+```typescript
+const date = DateUtil.createDate('2025-12-15 14:30:00');
+
+// Indian formats
+DateUtil.formatIndianDate(date); // "15-12-2025"
+DateUtil.formatIndianDateSlash(date); // "15/12/2025"
+DateUtil.formatIndianDateTime(date); // "15/12/2025, 14:30"
+
+// Invoice and report formats
+DateUtil.formatInvoiceDate(date); // "15-12-2025, 2:30 PM"
+DateUtil.formatDatabaseDateTime(date); // "2025-12-15 14:30:00"
+DateUtil.formatRoomSalesDate(date); // "2025-12-15 14:30"
+
+// Time only
+DateUtil.formatTimeOnly(date); // "14:30"
+DateUtil.formatTime12Hour(date); // "02:30 PM"
+DateUtil.formatFullMonthDate(date); // "15 Dec 2025"
+```
+
+### Date Range Operations
+
+```typescript
+// Generate date arrays
+const dates = DateUtil.getDateArray('2025-12-15', '2025-12-20');
+// Array of Date objects
+
+// Range in chunks (for large ranges)
+const chunks = DateUtil.dateRangeInChunks('2025-01-01', '2025-12-31', 30);
+// Array of arrays, each with max 30 dates
+
+// Overlap detection
+const overlap = DateUtil.getOverlapDays(
+  '2025-12-15', '2025-12-20',
+  '2025-12-18', '2025-12-25'
+); // 2 days overlap
+
+const hasOverlap = DateUtil.doRangesOverlap(
+  '2025-12-15', '2025-12-20',
+  '2025-12-18', '2025-12-25'
+); // true
+
+// Check if date is in overlap period
+DateUtil.isInOverlapPeriod(
+  '2025-12-17',
+  '2025-12-15',
+  '2025-12-20'
+); // true
+```
+
+### Advanced Operations
+
+```typescript
+// Time adjustments
+DateUtil.adjustTimeByOffset(date, 5, 30); // Add 5 hours 30 minutes
+
+// Convenient shortcuts
+DateUtil.daysAgo(7); // Date 7 days ago
+DateUtil.daysFromNow(14); // Date 14 days from now
+DateUtil.hoursAgo(24); // Date 24 hours ago
+DateUtil.hoursFromNow(12); // Date 12 hours from now
+
+// Sorting
+DateUtil.sortDatesAscending([date3, date1, date2]);
+DateUtil.sortDatesDescending([date1, date2, date3]);
+DateUtil.getEarliestDate([date1, date2, date3]);
+DateUtil.getLatestDate([date1, date2, date3]);
+
+// Conversions
+DateUtil.dateToMoment(new Date());
+DateUtil.momentToDate(momentInstance);
+DateUtil.isoToMoment('2025-12-15T14:30:00Z');
+
+// Parse multiple formats
+DateUtil.parseMultipleFormats(
+  '15/12/2025',
+  ['DD/MM/YYYY', 'DD-MM-YYYY', 'YYYY-MM-DD']
+);
+```
+
+### Date Keys for Grouping
+
+```typescript
+// Generate keys for data grouping
+DateUtil.toDateKey(date); // "2025-12-15"
+DateUtil.toMonthKey(date); // "2025-12"
+DateUtil.toYearKey(date); // "2025"
+DateUtil.toWeekKey(date); // "2025-W50"
 ```
 
 ### Getters

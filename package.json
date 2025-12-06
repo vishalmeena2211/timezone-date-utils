@@ -1,6 +1,6 @@
 {
   "name": "timezone-date-utils",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Comprehensive date and time utilities using moment-timezone with IST as default timezone. Works seamlessly in both Node.js backend and browser frontend environments.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

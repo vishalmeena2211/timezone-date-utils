@@ -1094,6 +1094,559 @@ export function formatDuration(
 }
 
 // ============================================================================
+// AGE CALCULATION
+// ============================================================================
+
+/**
+ * Calculate age from date of birth
+ */
+export function calculateAge(
+  dateOfBirth: DateInput,
+  referenceDate: DateInput = now(),
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): number {
+  const birthDate = createDate(dateOfBirth, undefined, timezone);
+  const refDate = createDate(referenceDate, undefined, timezone);
+  
+  return refDate.diff(birthDate, 'years');
+}
+
+/**
+ * Parse date of birth from DD/MM/YYYY format and calculate age
+ */
+export function calculateAgeFromDDMMYYYY(
+  dateString: string,
+  referenceDate: DateInput = now(),
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): number | null {
+  try {
+    const [day, month, year] = dateString.split('/').map(Number);
+    const birthDate = moment.tz([year, month - 1, day], timezone);
+    
+    if (!birthDate.isValid() || isNaN(birthDate.year())) {
+      return null;
+    }
+    
+    const refDate = createDate(referenceDate, undefined, timezone);
+    const age = refDate.year() - birthDate.year();
+    const monthDiff = refDate.month() - birthDate.month();
+    
+    // Adjust if birthday hasn't occurred yet this year
+    if (monthDiff < 0 || (monthDiff === 0 && refDate.date() < birthDate.date())) {
+      return age - 1;
+    }
+    
+    return age;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Get age in years, months, and days
+ */
+export function getDetailedAge(
+  dateOfBirth: DateInput,
+  referenceDate: DateInput = now(),
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): { years: number; months: number; days: number } {
+  const birthDate = createDate(dateOfBirth, undefined, timezone);
+  const refDate = createDate(referenceDate, undefined, timezone);
+  
+  const years = refDate.diff(birthDate, 'years');
+  birthDate.add(years, 'years');
+  
+  const months = refDate.diff(birthDate, 'months');
+  birthDate.add(months, 'months');
+  
+  const days = refDate.diff(birthDate, 'days');
+  
+  return { years, months, days };
+}
+
+// ============================================================================
+// DATE/TIME SEPARATION
+// ============================================================================
+
+/**
+ * Separate date and time into separate strings
+ */
+export function separateDateTime(
+  dateTime: DateInput,
+  dateFormat: DateFormat = DATE_FORMATS.INDIAN_DATE,
+  timeFormat: DateFormat = 'HH:mm',
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): { date: string; time: string } {
+  const m = createDate(dateTime, undefined, timezone);
+  return {
+    date: m.format(dateFormat),
+    time: m.format(timeFormat),
+  };
+}
+
+/**
+ * Separate date and time into separate strings with AM/PM
+ */
+export function separateDateTimeWithAMPM(
+  dateTime: DateInput,
+  dateFormat: DateFormat = DATE_FORMATS.INDIAN_DATE,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): { date: string; time: string } {
+  const m = createDate(dateTime, undefined, timezone);
+  return {
+    date: m.format(dateFormat),
+    time: m.format('hh:mm A'),
+  };
+}
+
+// ============================================================================
+// DATE RANGE GENERATION WITH CHUNKS
+// ============================================================================
+
+/**
+ * Generate date range in chunks to avoid memory issues with large ranges
+ */
+export function dateRangeInChunks(
+  start: DateInput,
+  end: DateInput,
+  chunkSize: number = 30,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment[][] {
+  const allDates = dateRange(start, end, 'days', timezone);
+  const chunks: Moment[][] = [];
+  
+  for (let i = 0; i < allDates.length; i += chunkSize) {
+    chunks.push(allDates.slice(i, i + chunkSize));
+  }
+  
+  return chunks;
+}
+
+/**
+ * Get array of dates as Date objects between start and end
+ */
+export function getDateArray(
+  startDate: DateInput,
+  endDate: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Date[] {
+  const dates: Date[] = [];
+  const currentDate = createDate(startDate, undefined, timezone);
+  const end = createDate(endDate, undefined, timezone);
+  
+  while (currentDate.isSameOrBefore(end, 'day')) {
+    dates.push(currentDate.toDate());
+    currentDate.add(1, 'day');
+  }
+  
+  return dates;
+}
+
+// ============================================================================
+// SPECIALIZED FORMATTING
+// ============================================================================
+
+/**
+ * Format date in Indian date format (DD-MM-YYYY)
+ */
+export function formatIndianDate(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, DATE_FORMATS.INDIAN_DATE, timezone);
+}
+
+/**
+ * Format date in Indian date format with slashes (DD/MM/YYYY)
+ */
+export function formatIndianDateSlash(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'DD/MM/YYYY', timezone);
+}
+
+/**
+ * Format date with time in Indian format (DD/MM/YYYY, HH:mm)
+ */
+export function formatIndianDateTime(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'DD/MM/YYYY, HH:mm', timezone);
+}
+
+/**
+ * Format date with time and AM/PM (DD-MM-YYYY, hh:mm A)
+ */
+export function formatInvoiceDate(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'DD-MM-YYYY, h:mm A', timezone);
+}
+
+/**
+ * Format for database queries (YYYY-MM-DD HH:mm:ss)
+ */
+export function formatDatabaseDateTime(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'YYYY-MM-DD HH:mm:ss', timezone);
+}
+
+/**
+ * Format time only (HH:mm)
+ */
+export function formatTimeOnly(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'HH:mm', timezone);
+}
+
+/**
+ * Format time with AM/PM (hh:mm A)
+ */
+export function formatTime12Hour(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'hh:mm A', timezone);
+}
+
+/**
+ * Format date with full month name (DD MMM YYYY)
+ */
+export function formatFullMonthDate(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'DD MMM YYYY', timezone);
+}
+
+/**
+ * Format date for room sales report (YYYY-MM-DD HH:mm)
+ */
+export function formatRoomSalesDate(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'YYYY-MM-DD HH:mm', timezone);
+}
+
+// ============================================================================
+// DATE VALIDATION AND CHECKING
+// ============================================================================
+
+/**
+ * Check if date string is in YYYY-MM-DD format and valid
+ */
+export function isValidYYYYMMDD(dateStr: string): boolean {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!regex.test(dateStr)) return false;
+  
+  return moment(dateStr, 'YYYY-MM-DD', true).isValid();
+}
+
+/**
+ * Check if date string is in DD-MM-YYYY format and valid
+ */
+export function isValidDDMMYYYY(dateStr: string): boolean {
+  const regex = /^\d{2}-\d{2}-\d{4}$/;
+  if (!regex.test(dateStr)) return false;
+  
+  return moment(dateStr, 'DD-MM-YYYY', true).isValid();
+}
+
+/**
+ * Check if date string is in DD/MM/YYYY format and valid
+ */
+export function isValidDDMMYYYYSlash(dateStr: string): boolean {
+  const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+  if (!regex.test(dateStr)) return false;
+  
+  return moment(dateStr, 'DD/MM/YYYY', true).isValid();
+}
+
+/**
+ * Check if two dates are on the same day (ignoring time)
+ */
+export function isSameDay(
+  date1: DateInput,
+  date2: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): boolean {
+  return isSame(date1, date2, 'day', timezone);
+}
+
+/**
+ * Check if date falls within check-in/check-out overlap period
+ */
+export function isInOverlapPeriod(
+  date: DateInput,
+  startDate: DateInput,
+  endDate: DateInput,
+  includeEnd: boolean = false,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): boolean {
+  const d = startOf(date, 'day', timezone);
+  const s = startOf(startDate, 'day', timezone);
+  const e = includeEnd ? endOf(endDate, 'day', timezone) : startOf(endDate, 'day', timezone);
+  
+  if (isSame(d, e, 'day')) return false;
+  
+  return (
+    (isSameOrBefore(s, d, 'day') && isAfter(e, d, 'day')) ||
+    (isBefore(s, d, 'day') && isSameOrAfter(e, d, 'day')) ||
+    isSame(s, d, 'day')
+  );
+}
+
+// ============================================================================
+// ADVANCED DATE OPERATIONS
+// ============================================================================
+
+/**
+ * Get overlapping days between two date ranges
+ */
+export function getOverlapDays(
+  range1Start: DateInput,
+  range1End: DateInput,
+  range2Start: DateInput,
+  range2End: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): number {
+  const r1Start = startOf(range1Start, 'day', timezone);
+  const r1End = startOf(range1End, 'day', timezone);
+  const r2Start = startOf(range2Start, 'day', timezone);
+  const r2End = startOf(range2End, 'day', timezone);
+  
+  const overlapStart = moment.max(r1Start, r2Start);
+  const overlapEnd = moment.min(r1End, r2End);
+  
+  if (overlapStart.isAfter(overlapEnd)) {
+    return 0;
+  }
+  
+  return overlapEnd.diff(overlapStart, 'days');
+}
+
+/**
+ * Check if two date ranges overlap
+ */
+export function doRangesOverlap(
+  range1Start: DateInput,
+  range1End: DateInput,
+  range2Start: DateInput,
+  range2End: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): boolean {
+  const r1Start = startOf(range1Start, 'day', timezone);
+  const r1End = startOf(range1End, 'day', timezone);
+  const r2Start = startOf(range2Start, 'day', timezone);
+  const r2End = startOf(range2End, 'day', timezone);
+  
+  return r1Start.isBefore(r2End) && r2Start.isBefore(r1End);
+}
+
+/**
+ * Adjust time by offset hours (for timezone conversions or IST adjustments)
+ */
+export function adjustTimeByOffset(
+  date: DateInput,
+  offsetHours: number,
+  offsetMinutes: number = 0,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return createDate(date, undefined, timezone)
+    .add(offsetHours, 'hours')
+    .add(offsetMinutes, 'minutes');
+}
+
+/**
+ * Get date N days ago from now
+ */
+export function daysAgo(
+  days: number,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return subtract(now(timezone), days, 'days', timezone);
+}
+
+/**
+ * Get date N days from now
+ */
+export function daysFromNow(
+  days: number,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return add(now(timezone), days, 'days', timezone);
+}
+
+/**
+ * Get date N hours ago from now
+ */
+export function hoursAgo(
+  hours: number,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return subtract(now(timezone), hours, 'hours', timezone);
+}
+
+/**
+ * Get date N hours from now
+ */
+export function hoursFromNow(
+  hours: number,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return add(now(timezone), hours, 'hours', timezone);
+}
+
+// ============================================================================
+// SORTING HELPERS
+// ============================================================================
+
+/**
+ * Sort array of dates in ascending order
+ */
+export function sortDatesAscending(
+  dates: DateInput[],
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Date[] {
+  return dates
+    .map(d => createDate(d, undefined, timezone).toDate())
+    .sort((a, b) => a.getTime() - b.getTime());
+}
+
+/**
+ * Sort array of dates in descending order
+ */
+export function sortDatesDescending(
+  dates: DateInput[],
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Date[] {
+  return dates
+    .map(d => createDate(d, undefined, timezone).toDate())
+    .sort((a, b) => b.getTime() - a.getTime());
+}
+
+/**
+ * Get the earliest date from an array
+ */
+export function getEarliestDate(
+  dates: DateInput[],
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return min(dates, timezone);
+}
+
+/**
+ * Get the latest date from an array
+ */
+export function getLatestDate(
+  dates: DateInput[],
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return max(dates, timezone);
+}
+
+// ============================================================================
+// CONVERSION HELPERS
+// ============================================================================
+
+/**
+ * Convert Date object to moment in specified timezone
+ */
+export function dateToMoment(
+  date: Date,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return moment.tz(date, timezone);
+}
+
+/**
+ * Convert moment to native Date object
+ */
+export function momentToDate(momentDate: Moment): Date {
+  return momentDate.toDate();
+}
+
+/**
+ * Convert ISO string to moment
+ */
+export function isoToMoment(
+  isoString: string,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment {
+  return moment.tz(isoString, timezone);
+}
+
+/**
+ * Parse multiple date formats and return moment
+ */
+export function parseMultipleFormats(
+  dateString: string,
+  formats: string[],
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): Moment | null {
+  for (const fmt of formats) {
+    const m = moment.tz(dateString, fmt, true, timezone);
+    if (m.isValid()) {
+      return m;
+    }
+  }
+  return null;
+}
+
+// ============================================================================
+// DATE KEY GENERATION
+// ============================================================================
+
+/**
+ * Generate a date key for grouping (YYYY-MM-DD format)
+ */
+export function toDateKey(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return toISODate(date, timezone);
+}
+
+/**
+ * Generate a month key for grouping (YYYY-MM format)
+ */
+export function toMonthKey(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'YYYY-MM', timezone);
+}
+
+/**
+ * Generate a year key for grouping (YYYY format)
+ */
+export function toYearKey(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  return format(date, 'YYYY', timezone);
+}
+
+/**
+ * Generate a week key for grouping (YYYY-Www format)
+ */
+export function toWeekKey(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): string {
+  const m = createDate(date, undefined, timezone);
+  return `${m.year()}-W${m.week().toString().padStart(2, '0')}`;
+}
+
+// ============================================================================
 // EXPORT CONSTANTS
 // ============================================================================
 

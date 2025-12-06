@@ -48,6 +48,12 @@ export const DATE_FORMATS = {
   INVOICE_DATE: 'DD-MMM-YYYY',
   REPORT_DATE: 'YYYY-MM-DD',
   
+  // Indian formats
+  INDIAN_DATE: 'DD-MM-YYYY',
+  INDIAN_DATE_SLASH: 'DD/MM/YYYY',
+  INDIAN_DATETIME: 'DD/MM/YYYY, HH:mm',
+  INDIAN_DATETIME_AMPM: 'DD-MM-YYYY, h:mm A',
+  
   // Timestamp formats
   TIMESTAMP: 'YYYY-MM-DD HH:mm:ss',
   TIMESTAMP_WITH_ZONE: 'YYYY-MM-DD HH:mm:ss Z',
