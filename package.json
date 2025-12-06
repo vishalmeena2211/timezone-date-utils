@@ -49,7 +49,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/digistayai/date-utils.git"
+    "url": "git+https://github.com/digistayai/date-utils.git"
   },
   "bugs": {
     "url": "https://github.com/digistayai/date-utils/issues"
