@@ -66,7 +66,7 @@ export function createDate(
   format?: DateFormat,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
-  if (!input) {
+  if (input === undefined || input === null) {
     return now(timezone);
   }
 
