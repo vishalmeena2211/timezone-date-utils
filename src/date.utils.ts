@@ -18,34 +18,44 @@ import {
   MILLISECONDS_IN,
 } from './constants/timezone';
 
-/**
- * Type definitions
- */
-export type DateInput = string | number | Date | Moment;
-export type TimeUnit = unitOfTime.DurationConstructor;
-export type DateFormat = string;
-export type Timezone = string;
+// Import strict types
+import type {
+  DateInput,
+  TimeUnit,
+  DateFormat,
+  Timezone,
+  DateRange,
+  Duration,
+  DayOfWeek,
+  MonthOfYear,
+  HourOfDay,
+  PositiveInteger,
+  NonNegativeInteger,
+  ISODateString,
+  UnixTimestamp,
+  UnixTimestampSeconds,
+  DateValidationResult,
+  BetweenInclusivity,
+  SeparatedDateTime,
+  AgeResult,
+  DateComponents,
+  RangeOverlapResult,
+} from './types';
 
-/**
- * Interface for date range
- */
-export interface DateRange {
-  start: Moment;
-  end: Moment;
-}
-
-/**
- * Interface for duration
- */
-export interface Duration {
-  years?: number;
-  months?: number;
-  weeks?: number;
-  days?: number;
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
-}
+// Re-export types for backward compatibility
+export type {
+  DateInput,
+  TimeUnit,
+  DateFormat,
+  Timezone,
+  DateRange,
+  Duration,
+  DayOfWeek,
+  MonthOfYear,
+  HourOfDay,
+  PositiveInteger,
+  NonNegativeInteger,
+};
 
 // ============================================================================
 // CREATION AND PARSING
@@ -189,8 +199,8 @@ export function toISOString(
 export function toISODate(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): string {
-  return format(date, DATE_FORMATS.ISO_DATE, timezone);
+): ISODateString {
+  return format(date, DATE_FORMATS.ISO_DATE, timezone) as ISODateString;
 }
 
 /**
@@ -223,8 +233,8 @@ export function toFileFormat(
 export function toTimestamp(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
-  return createDate(date, undefined, timezone).valueOf();
+): UnixTimestamp {
+  return createDate(date, undefined, timezone).valueOf() as UnixTimestamp;
 }
 
 /**
@@ -233,8 +243,8 @@ export function toTimestamp(
 export function toUnix(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
-  return createDate(date, undefined, timezone).unix();
+): UnixTimestampSeconds {
+  return createDate(date, undefined, timezone).unix() as UnixTimestampSeconds;
 }
 
 // ============================================================================
@@ -538,8 +548,8 @@ export function getYear(
 export function getMonth(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
-  return createDate(date, undefined, timezone).month();
+): MonthOfYear {
+  return createDate(date, undefined, timezone).month() as MonthOfYear;
 }
 
 /**
@@ -558,8 +568,8 @@ export function getDate(
 export function getDayOfWeek(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
-  return createDate(date, undefined, timezone).day();
+): DayOfWeek {
+  return createDate(date, undefined, timezone).day() as DayOfWeek;
 }
 
 /**
@@ -588,8 +598,8 @@ export function getWeekOfYear(
 export function getHour(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
-  return createDate(date, undefined, timezone).hour();
+): HourOfDay {
+  return createDate(date, undefined, timezone).hour() as HourOfDay;
 }
 
 /**
@@ -620,6 +630,25 @@ export function getMillisecond(
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): number {
   return createDate(date, undefined, timezone).millisecond();
+}
+
+/**
+ * Get all date components as a structured object
+ */
+export function getDateComponents(
+  date: DateInput,
+  timezone: Timezone = DEFAULT_TIMEZONE,
+): DateComponents {
+  const m = createDate(date, undefined, timezone);
+  return {
+    year: m.year(),
+    month: m.month() as MonthOfYear,
+    day: m.date(),
+    hour: m.hour() as HourOfDay,
+    minute: m.minute(),
+    second: m.second(),
+    millisecond: m.millisecond(),
+  };
 }
 
 // ============================================================================
@@ -950,11 +979,11 @@ export function calculateNights(
   checkIn: DateInput,
   checkOut: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
+): NonNegativeInteger {
   const checkInDate = startOf(checkIn, 'day', timezone);
   const checkOutDate = startOf(checkOut, 'day', timezone);
   const nights = diffInDays(checkOutDate, checkInDate, timezone);
-  return Math.max(0, nights);
+  return Math.max(0, nights) as NonNegativeInteger;
 }
 
 /**
@@ -1041,7 +1070,7 @@ export function countBusinessDays(
   startDate: DateInput,
   endDate: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
+): NonNegativeInteger {
   const start = createDate(startDate, undefined, timezone);
   const end = createDate(endDate, undefined, timezone);
   
@@ -1055,7 +1084,7 @@ export function countBusinessDays(
     current.add(1, 'day');
   }
   
-  return count;
+  return count as NonNegativeInteger;
 }
 
 // ============================================================================
@@ -1104,11 +1133,11 @@ export function calculateAge(
   dateOfBirth: DateInput,
   referenceDate: DateInput = now(),
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
+): NonNegativeInteger {
   const birthDate = createDate(dateOfBirth, undefined, timezone);
   const refDate = createDate(referenceDate, undefined, timezone);
   
-  return refDate.diff(birthDate, 'years');
+  return Math.max(0, refDate.diff(birthDate, 'years')) as NonNegativeInteger;
 }
 
 /**
@@ -1149,19 +1178,28 @@ export function getDetailedAge(
   dateOfBirth: DateInput,
   referenceDate: DateInput = now(),
   timezone: Timezone = DEFAULT_TIMEZONE,
-): { years: number; months: number; days: number } {
+): AgeResult {
   const birthDate = createDate(dateOfBirth, undefined, timezone);
   const refDate = createDate(referenceDate, undefined, timezone);
   
-  const years = refDate.diff(birthDate, 'years');
+  const years = Math.max(0, refDate.diff(birthDate, 'years'));
   birthDate.add(years, 'years');
   
-  const months = refDate.diff(birthDate, 'months');
+  const months = Math.max(0, refDate.diff(birthDate, 'months'));
   birthDate.add(months, 'months');
   
-  const days = refDate.diff(birthDate, 'days');
+  const days = Math.max(0, refDate.diff(birthDate, 'days'));
   
-  return { years, months, days };
+  const totalDays = Math.max(0, refDate.diff(createDate(dateOfBirth, undefined, timezone), 'days'));
+  
+  return {
+    years: years as NonNegativeInteger,
+    months: months as NonNegativeInteger,
+    days: days as NonNegativeInteger,
+    totalDays: totalDays as NonNegativeInteger,
+    isAdult: years >= 18,
+    isSenior: years >= 60,
+  };
 }
 
 // ============================================================================
@@ -1176,7 +1214,7 @@ export function separateDateTime(
   dateFormat: DateFormat = DATE_FORMATS.INDIAN_DATE,
   timeFormat: DateFormat = 'HH:mm',
   timezone: Timezone = DEFAULT_TIMEZONE,
-): { date: string; time: string } {
+): SeparatedDateTime {
   const m = createDate(dateTime, undefined, timezone);
   return {
     date: m.format(dateFormat),
@@ -1191,7 +1229,7 @@ export function separateDateTimeWithAMPM(
   dateTime: DateInput,
   dateFormat: DateFormat = DATE_FORMATS.INDIAN_DATE,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): { date: string; time: string } {
+): SeparatedDateTime {
   const m = createDate(dateTime, undefined, timezone);
   return {
     date: m.format(dateFormat),
@@ -1417,7 +1455,7 @@ export function getOverlapDays(
   range2Start: DateInput,
   range2End: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
-): number {
+): NonNegativeInteger {
   const r1Start = startOf(range1Start, 'day', timezone);
   const r1End = startOf(range1End, 'day', timezone);
   const r2Start = startOf(range2Start, 'day', timezone);
@@ -1427,10 +1465,10 @@ export function getOverlapDays(
   const overlapEnd = moment.min(r1End, r2End);
   
   if (overlapStart.isAfter(overlapEnd)) {
-    return 0;
+    return 0 as NonNegativeInteger;
   }
   
-  return overlapEnd.diff(overlapStart, 'days');
+  return Math.max(0, overlapEnd.diff(overlapStart, 'days')) as NonNegativeInteger;
 }
 
 /**

@@ -9,10 +9,13 @@ Comprehensive date and time utilities using moment-timezone with IST (Indian Sta
 - ✅ **moment-timezone** - Built on battle-tested library
 - ✅ **Hotel-Specific** - Check-in/out times, night audit, etc.
 - ✅ **Comprehensive** - 60+ utility functions
-- ✅ **Type-Safe** - Full TypeScript support
+- ✅ **Type-Safe** - Full TypeScript support with strict types
+- ✅ **Runtime Validation** - Type guards, validators, and assertions
 - ✅ **Business Logic** - Weekend/weekday detection, business days
 - ✅ **Flexible Formatting** - Multiple display formats
 - ✅ **ESM & CJS** - Supports both module systems
+- ✅ **Branded Types** - Enhanced type safety with branded primitives
+- ✅ **Immutable** - Readonly types for data integrity
 
 ## 📦 Installation
 
@@ -29,6 +32,13 @@ pnpm add timezone-date-utils
 ```bash
 npm install moment-timezone
 ```
+
+## 📚 Documentation
+
+- **[Quick Reference](./QUICK_REFERENCE.md)** - Quick function reference
+- **[Strict Types Guide](./STRICT_TYPES_GUIDE.md)** - Complete guide to strict typing, type guards, and validators
+- **[Development Guide](./DEVELOPMENT.md)** - Development and contribution guide
+- **[Examples](./examples.js)** - Practical examples
 
 ## 🚀 Usage
 
@@ -467,7 +477,9 @@ MILLISECONDS_IN.DAY // 86400000
 
 ## 🔧 TypeScript Support
 
-Full TypeScript support with exported types:
+Full TypeScript support with comprehensive strict types, type guards, validators, and assertions.
+
+### Basic Types
 
 ```typescript
 import type {
@@ -481,6 +493,111 @@ import type {
   Moment,
 } from 'timezone-date-utils';
 ```
+
+### Strict Types & Branded Types
+
+```typescript
+import type {
+  // Branded types for enhanced type safety
+  ISODateString,
+  ISODateTimeString,
+  UnixTimestamp,
+  TimeFormat,
+  PositiveInteger,
+  NonNegativeInteger,
+  
+  // Strict numeric types
+  DayOfWeek, // 0-6
+  MonthOfYear, // 0-11
+  HourOfDay, // 0-23
+  
+  // Strict complex types
+  StrictBusinessHours,
+  StrictRecurringPattern,
+  StrictDuration,
+} from 'timezone-date-utils';
+```
+
+### Type Guards & Validators
+
+```typescript
+import {
+  // Type guards
+  isISODateString,
+  isPositiveInteger,
+  isDayOfWeek,
+  isTimeFormat,
+  
+  // Validators (return branded types or null)
+  toISODateString,
+  toPositiveInteger,
+  validateDateString,
+  
+  // Assertions (throw on invalid)
+  assertPositiveInteger,
+  assertDayOfWeek,
+  
+  // Grouped utilities
+  TypeGuards,
+  Validators,
+  Assertions,
+} from 'timezone-date-utils';
+
+// Example usage
+const dateStr = '2024-01-15';
+if (isISODateString(dateStr)) {
+  // dateStr is now type ISODateString
+  console.log('Valid ISO date:', dateStr);
+}
+
+// With validator
+const validDate = toISODateString('2024-01-15'); // ISODateString | null
+
+// With assertion
+assertPositiveInteger(nights, 'nights'); // Throws if invalid
+```
+
+### Complete Type-Safe Example
+
+```typescript
+import {
+  ISODateString,
+  PositiveInteger,
+  BookingStatus,
+  toISODateString,
+  toPositiveInteger,
+  calculateNights,
+} from 'timezone-date-utils';
+
+interface Booking {
+  readonly id: string;
+  readonly checkIn: ISODateString;
+  readonly checkOut: ISODateString;
+  readonly nights: PositiveInteger;
+  readonly status: BookingStatus;
+}
+
+function createBooking(checkIn: string, checkOut: string): Booking | null {
+  const validCheckIn = toISODateString(checkIn);
+  const validCheckOut = toISODateString(checkOut);
+  
+  if (!validCheckIn || !validCheckOut) return null;
+  
+  const nights = toPositiveInteger(calculateNights(validCheckIn, validCheckOut));
+  if (!nights) return null;
+  
+  return {
+    id: crypto.randomUUID(),
+    checkIn: validCheckIn,
+    checkOut: validCheckOut,
+    nights,
+    status: 'confirmed',
+  };
+}
+```
+
+📖 **See [Strict Types Guide](./STRICT_TYPES_GUIDE.md) for comprehensive documentation on strict types, type guards, validators, and best practices.**
+
 
 ## 🎯 Common Use Cases
 
