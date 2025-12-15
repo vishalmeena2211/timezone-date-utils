@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2025-12-15
+
+### Changed - Complete Strict Typing 🔒
+- **BREAKING**: `DateFormat` type now strictly uses `StrictDateFormat`
+  - No longer accepts arbitrary strings
+  - Only predefined format strings are allowed
+  - Prevents invalid format strings at compile time
+  
+### Added - Additional Date Formats
+- **`YYYY-MM-DD HH:mm`**: Date with hours and minutes (no seconds)
+- **`YYYY-MM`**: Year and month format for period grouping
+- **`YYYY`**: Year only format for annual reports
+
+### Benefits
+- ✅ **100% strict typing** - No string/number fallbacks anywhere
+- ✅ **Complete compile-time validation** of all formats
+- ✅ **IDE auto-complete** for all date formats
+- ✅ **Zero possibility** of format string typos
+
+### Migration Notes
+- All functions using `DateFormat` parameter now require predefined formats
+- Use format constants from `DATE_FORMATS` or literal types from `StrictDateFormat`
+- Custom formats are no longer supported - request addition if needed
+
 ## [1.2.1] - 2025-12-15
 
 ### Changed - Stricter Type Safety 🔒

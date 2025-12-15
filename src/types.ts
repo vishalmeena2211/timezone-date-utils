@@ -117,6 +117,7 @@ export type Timezone = IANATimezone;
 /**
  * Valid date format strings (exhaustive list)
  * Based on DATE_FORMATS constants
+ * This is the strict type that only allows predefined formats
  */
 export type StrictDateFormat =
   // Standard formats
@@ -138,6 +139,7 @@ export type StrictDateFormat =
   | 'DD MMMM YYYY, hh:mm:ss A'
   | 'DD/MM/YYYY HH:mm'
   | 'dddd, DD MMMM YYYY, hh:mm A'
+  | 'YYYY-MM-DD HH:mm'
   // Hotel specific formats
   | 'DD-MMM-YYYY'
   // Indian formats
@@ -151,13 +153,17 @@ export type StrictDateFormat =
   | 'YYYYMMDD'
   | 'YYYYMMDD_HHmmss'
   // Database formats
-  | 'YYYY-MM-DD HH:mm:ss.SSS';
+  | 'YYYY-MM-DD HH:mm:ss.SSS'
+  // Period formats
+  | 'YYYY-MM'
+  | 'YYYY';
 
 /**
- * Date format string - accepts any moment.js format string for flexibility
- * Use StrictDateFormat for compile-time validation of known formats
+ * Date format type - now strictly uses StrictDateFormat
+ * Only predefined formats are allowed for maximum type safety
+ * No string fallback - prevents invalid format strings at compile time
  */
-export type DateFormat = string;
+export type DateFormat = StrictDateFormat;
 
 /**
  * Day of week (0-6, Sunday to Saturday)
