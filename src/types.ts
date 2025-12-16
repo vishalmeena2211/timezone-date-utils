@@ -144,8 +144,12 @@ export type StrictDateFormat =
   | 'DD-MMM-YYYY'
   // Indian formats
   | 'DD-MM-YYYY'
+  | 'DD-MM-YYYY HH:mm'
   | 'DD/MM/YYYY, HH:mm'
+  | 'DD/MM/YYYY, HH:mm:ss'
   | 'DD-MM-YYYY, h:mm A'
+  | 'DD-MM-YY'
+  | 'DD-MM-YY; hh:mm A'
   // Timestamp formats
   | 'YYYY-MM-DD HH:mm:ss'
   | 'YYYY-MM-DD HH:mm:ss Z'
