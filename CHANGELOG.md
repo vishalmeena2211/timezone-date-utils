@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2025-12-16
+
+### Added - Additional Indian Date Format Constants
+- **`INDIAN_DATE_SHORT`**: `'DD-MM-YY'` - Short Indian date format (2-digit year)
+- **`INDIAN_DATETIME_WITH_SECONDS`**: `'DD/MM/YYYY, HH:mm:ss'` - Indian date format with full time
+- **`INDIAN_DATETIME_24`**: `'DD-MM-YYYY HH:mm'` - Indian date format with 24-hour time
+- **`INDIAN_DATETIME_SHORT_AMPM`**: `'DD-MM-YY; hh:mm A'` - Short Indian date with 12-hour time
+
+### Why This Update?
+Added corresponding constants to `DATE_FORMATS` for all newly added strict format types, making them easily accessible throughout the application.
+
 ## [1.2.3] - 2025-12-16
 
 ### Added - Additional Indian and Custom Date Formats
