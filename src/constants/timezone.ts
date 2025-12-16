@@ -60,6 +60,7 @@ export const DATE_FORMATS = {
   
   // Timestamp formats
   TIMESTAMP: 'YYYY-MM-DD HH:mm:ss',
+  TIMESTAMP_SHORT: 'YYYY-MM-DD HH:mm',
   TIMESTAMP_WITH_ZONE: 'YYYY-MM-DD HH:mm:ss Z',
   
   // File naming formats
