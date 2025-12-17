@@ -47,6 +47,14 @@ export const DATE_FORMATS = {
   DISPLAY_TIME_24: 'HH:mm',
   DISPLAY_TIME_FULL_12: 'hh:mm:ss A',
   DISPLAY_TIME_FULL_24: 'HH:mm:ss',
+  DISPLAY_TIME_HOUR_12: 'hh A',
+  DISPLAY_TIME_HOUR_12_SHORT: 'h A',
+  DISPLAY_TIME_HOUR_24: 'HH',
+  DISPLAY_TIME_12_NO_LEADING: 'h:mm A',
+  DISPLAY_TIME_24_NO_LEADING: 'H:mm',
+  DISPLAY_TIME_SECONDS_12: 'hh:ss A',
+  DISPLAY_TIME_MINUTES_SECONDS: 'mm:ss',
+  DISPLAY_TIME_WITH_MS: 'HH:mm:ss.SSS',
   
   // Combined date-time formats
   DISPLAY_DATETIME: 'DD MMM YYYY, hh:mm A',
