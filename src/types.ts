@@ -129,6 +129,7 @@ export type StrictDateFormat =
   | 'DD MMMM YYYY'
   | 'DD/MM/YYYY'
   | 'dddd, DD MMMM YYYY'
+  | 'ddd, MMM DD, YYYY'
   // Time formats
   | 'hh:mm A'
   | 'HH:mm'

@@ -29,6 +29,7 @@ export const DATE_FORMATS = {
   DISPLAY_DATE_FULL: 'DD MMMM YYYY',
   DISPLAY_DATE_SHORT: 'DD/MM/YYYY',
   DISPLAY_DATE_LONG: 'dddd, DD MMMM YYYY',
+  DISPLAY_DATE_MEDIUM: 'ddd, MMM DD, YYYY',
   
   // Time formats
   DISPLAY_TIME_12: 'hh:mm A',
