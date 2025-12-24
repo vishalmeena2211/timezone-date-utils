@@ -124,7 +124,18 @@ export type StrictDateFormat =
   | 'YYYY-MM-DDTHH:mm:ss.SSSZ'
   | 'YYYY-MM-DD'
   | 'HH:mm:ss'
+  // Year and month formats
+  | 'YYYY'
+  | 'YYYYMM'
+  | 'YYYY-MM'
+  // Simple date formats
+  | 'M/D'
+  | 'MM/DD'
+  | 'M/D/YY'
+  | 'MM/DD/YY'
+  | 'MM/DD/YYYY'
   // Display formats
+  | 'DD MMM YY'
   | 'DD MMM YYYY'
   | 'DD MMMM YYYY'
   | 'DD/MM/YYYY'
@@ -132,7 +143,10 @@ export type StrictDateFormat =
   | 'ddd, MMM DD, YYYY'
   | 'dddd, MMM DD'
   | 'ddd, MMM DD'
+  | 'MMM D, YY'
+  | 'MMM D, YYYY'
   | 'MMM DD, YYYY'
+  | 'MMMM D, YYYY'
   | 'MMMM DD, YYYY'
   | 'DD MMM'
   | 'MMM DD'
@@ -141,15 +155,19 @@ export type StrictDateFormat =
   | 'DD-MMM-YY'
   | 'MMM YYYY'
   | 'MMMM YYYY'
+  // Alternative date formats
+  | 'YYYY_MM_DD'
+  | 'YYYY.MM.DD'
   // Time formats
+  | 'h:mm A'
   | 'hh:mm A'
+  | '@ h:mm A'
   | 'HH:mm'
   | 'hh:mm:ss A'
   | 'HH:mm:ss'
   | 'hh A'
   | 'h A'
   | 'HH'
-  | 'h:mm A'
   | 'H:mm'
   | 'hh:ss A'
   | 'mm:ss'
@@ -160,6 +178,9 @@ export type StrictDateFormat =
   | 'DD/MM/YYYY HH:mm'
   | 'dddd, DD MMMM YYYY, hh:mm A'
   | 'YYYY-MM-DD HH:mm'
+  | 'YYYY-MM-DD h:mm A'
+  | 'YYYY-MM-DD hh:mm A'
+  | 'YYYY-MM-DD @ h:mm A'
   // Hotel specific formats
   | 'DD-MMM-YYYY'
   // Indian formats
@@ -173,14 +194,58 @@ export type StrictDateFormat =
   // Timestamp formats
   | 'YYYY-MM-DD HH:mm:ss'
   | 'YYYY-MM-DD HH:mm:ss Z'
+  | 'YYYY-MM-DD HH:mm.ss'
   // File naming formats
   | 'YYYYMMDD'
+  | 'YYYYMMDDHHmm'
+  | 'YYYYMMDD_HHmm'
+  | 'YYYYMMDDHHmmss'
   | 'YYYYMMDD_HHmmss'
+  | 'YYYY.MM.DD.HHmm'
+  | 'YYYY-MM-DD-HHmm'
+  | 'YYYY-MM-DD_HHmm'
+  | 'YYYY.MM.DD.HH.mm'
+  | 'YYYY-MM-DD-HH-mm'
+  | 'YYYY.MM.DD.HHmmss'
+  | 'YYYY-MM-DD-HHmmss'
+  | 'YYYY-MM-DD_HHmmss'
+  | 'YYYY-MM-DD_HHmm.ss'
+  | 'YYYY.MM.DD.HH.mm.ss'
+  | 'YYYY-MM-DD-HH-mm-ss'
+  | 'YYYY-MM-DD h:mm:ss A'
+  | 'YYYY-MM-DD hh:mm:ss A'
+  | 'YYYY-MM-DD @ h:mm:ss A'
   // Database formats
   | 'YYYY-MM-DD HH:mm:ss.SSS'
-  // Period formats
-  | 'YYYY-MM'
-  | 'YYYY';
+  // Weekday date formats
+  | 'dd MMM D YY'
+  | 'ddd MMM D YY'
+  | 'ddd MMM D YYYY'
+  | 'ddd MMM DD YYYY'
+  | 'dddd, MMM D YYYY'
+  | 'dddd, MMMM D, YYYY'
+  | 'dddd, MMMM DD, YYYY'
+  // Weekday date-time formats with h:mm A
+  | 'ddd MMM D YY h:mm A'
+  | 'ddd MMM D YYYY h:mm A'
+  | 'ddd MMM DD YYYY h:mm A'
+  | 'dddd, MMM D YYYY h:mm A'
+  | 'dddd, MMMM D, YYYY h:mm A'
+  | 'dddd, MMMM DD, YYYY h:mm A'
+  // Weekday date-time formats with hh:mm A
+  | 'ddd MMM D YY hh:mm A'
+  | 'ddd MMM D YYYY hh:mm A'
+  | 'ddd MMM DD YYYY hh:mm A'
+  | 'dddd, MMM D YYYY hh:mm A'
+  | 'dddd, MMMM D, YYYY hh:mm A'
+  | 'dddd, MMMM DD, YYYY hh:mm A'
+  // Weekday date-time formats with @ h:mm A
+  | 'ddd MMM D YY @ h:mm A'
+  | 'ddd MMM D YYYY @ h:mm A'
+  | 'ddd MMM DD YYYY @ h:mm A'
+  | 'dddd, MMM D YYYY @ h:mm A'
+  | 'dddd, MMMM D, YYYY @ h:mm A'
+  | 'dddd, MMMM DD, YYYY @ h:mm A';
 
 /**
  * Date format type - now strictly uses StrictDateFormat

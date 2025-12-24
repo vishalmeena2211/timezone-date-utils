@@ -4,7 +4,7 @@
  * All dates are handled in IST (Asia/Kolkata) timezone by default
  */
 
-import moment, { Moment, unitOfTime } from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 import {
   DEFAULT_TIMEZONE,
   DATE_FORMATS,
@@ -302,7 +302,7 @@ export function subtractDuration(
  */
 export function startOf(
   date: DateInput,
-  unit: TimeUnit = 'day',
+  unit: TimeUnit = TIME_UNITS.DAY,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
   return createDate(date, undefined, timezone).startOf(unit);
@@ -313,7 +313,7 @@ export function startOf(
  */
 export function endOf(
   date: DateInput,
-  unit: TimeUnit = 'day',
+  unit: TimeUnit = TIME_UNITS.DAY,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
   return createDate(date, undefined, timezone).endOf(unit);
@@ -481,7 +481,9 @@ export function diffInDays(
   date2: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): number {
-  return diff(date1, date2, 'days', false, timezone);
+  // Ensure that the number of nights (days) is always positive and greater than 0
+  const nights = diff(date1, date2, 'days', false, timezone);
+  return nights > 0 ? nights : 1;
 }
 
 /**
@@ -682,7 +684,7 @@ export function isToday(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  return isSame(date, now(timezone), 'day', timezone);
+  return isSame(date, now(timezone), TIME_UNITS.DAY, timezone);
 }
 
 /**
@@ -692,8 +694,8 @@ export function isYesterday(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  const yesterday = subtract(now(timezone), 1, 'day', timezone);
-  return isSame(date, yesterday, 'day', timezone);
+  const yesterday = subtract(now(timezone), 1, TIME_UNITS.DAY, timezone);
+  return isSame(date, yesterday, TIME_UNITS.DAY, timezone);
 }
 
 /**
@@ -703,8 +705,8 @@ export function isTomorrow(
   date: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  const tomorrow = add(now(timezone), 1, 'day', timezone);
-  return isSame(date, tomorrow, 'day', timezone);
+  const tomorrow = add(now(timezone), 1, TIME_UNITS.DAY, timezone);
+  return isSame(date, tomorrow, TIME_UNITS.DAY, timezone);
 }
 
 /**
@@ -894,8 +896,8 @@ export function dateRange(
 export function getTodayRange(timezone: Timezone = DEFAULT_TIMEZONE): DateRange {
   const today = now(timezone);
   return {
-    start: startOf(today, 'day', timezone),
-    end: endOf(today, 'day', timezone),
+    start: startOf(today, TIME_UNITS.DAY, timezone),
+    end: endOf(today, TIME_UNITS.DAY, timezone),
   };
 }
 
@@ -941,8 +943,8 @@ export function getLastNDaysRange(
 ): DateRange {
   const today = now(timezone);
   return {
-    start: startOf(subtract(today, days - 1, 'days', timezone), 'day', timezone),
-    end: endOf(today, 'day', timezone),
+    start: startOf(subtract(today, days - 1, 'days', timezone), TIME_UNITS.DAY, timezone),
+    end: endOf(today, TIME_UNITS.DAY, timezone),
   };
 }
 
@@ -980,10 +982,10 @@ export function calculateNights(
   checkOut: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): NonNegativeInteger {
-  const checkInDate = startOf(checkIn, 'day', timezone);
-  const checkOutDate = startOf(checkOut, 'day', timezone);
+  const checkInDate = startOf(checkIn, TIME_UNITS.DAY, timezone);
+  const checkOutDate = startOf(checkOut, TIME_UNITS.DAY, timezone);
   const nights = diffInDays(checkOutDate, checkInDate, timezone);
-  return Math.max(0, nights) as NonNegativeInteger;
+  return Math.max(1, nights) as NonNegativeInteger;
 }
 
 /**
@@ -1017,11 +1019,11 @@ export function getNightAuditDate(
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
   const currentTime = now(timezone);
-  const midnightToday = startOf(currentTime, 'day', timezone);
+  const midnightToday = startOf(currentTime, TIME_UNITS.DAY, timezone);
   
   // If it's past midnight but before check-out time, audit date is yesterday
   if (currentTime.isBefore(getCheckOutTime(currentTime, timezone))) {
-    return subtract(midnightToday, 1, 'day', timezone);
+    return subtract(midnightToday, 1, TIME_UNITS.DAY, timezone);
   }
   
   return midnightToday;
@@ -1038,10 +1040,10 @@ export function getNextBusinessDay(
   date: DateInput = now(),
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
-  let nextDay = add(date, 1, 'day', timezone);
+  let nextDay = add(date, 1, TIME_UNITS.DAY, timezone);
   
   while (isWeekend(nextDay, timezone)) {
-    nextDay = add(nextDay, 1, 'day', timezone);
+    nextDay = add(nextDay, 1, TIME_UNITS.DAY, timezone);
   }
   
   return nextDay;
@@ -1054,10 +1056,10 @@ export function getPreviousBusinessDay(
   date: DateInput = now(),
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): Moment {
-  let prevDay = subtract(date, 1, 'day', timezone);
+  let prevDay = subtract(date, 1, TIME_UNITS.DAY, timezone);
   
   while (isWeekend(prevDay, timezone)) {
-    prevDay = subtract(prevDay, 1, 'day', timezone);
+    prevDay = subtract(prevDay, 1, TIME_UNITS.DAY, timezone);
   }
   
   return prevDay;
@@ -1077,11 +1079,11 @@ export function countBusinessDays(
   let count = 0;
   let current = start.clone();
   
-  while (current.isSameOrBefore(end, 'day')) {
+  while (current.isSameOrBefore(end, TIME_UNITS.DAY)) {
     if (isWeekday(current, timezone)) {
       count++;
     }
-    current.add(1, 'day');
+    current.add(1, TIME_UNITS.DAY);
   }
   
   return count as NonNegativeInteger;
@@ -1272,9 +1274,9 @@ export function getDateArray(
   const currentDate = createDate(startDate, undefined, timezone);
   const end = createDate(endDate, undefined, timezone);
   
-  while (currentDate.isSameOrBefore(end, 'day')) {
+  while (currentDate.isSameOrBefore(end, TIME_UNITS.DAY)) {
     dates.push(currentDate.toDate());
-    currentDate.add(1, 'day');
+    currentDate.add(1, TIME_UNITS.DAY);
   }
   
   return dates;
@@ -1416,7 +1418,7 @@ export function isSameDay(
   date2: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  return isSame(date1, date2, 'day', timezone);
+  return isSame(date1, date2, TIME_UNITS.DAY, timezone);
 }
 
 /**
@@ -1429,16 +1431,16 @@ export function isInOverlapPeriod(
   includeEnd: boolean = false,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  const d = startOf(date, 'day', timezone);
-  const s = startOf(startDate, 'day', timezone);
-  const e = includeEnd ? endOf(endDate, 'day', timezone) : startOf(endDate, 'day', timezone);
+  const d = startOf(date, TIME_UNITS.DAY, timezone);
+  const s = startOf(startDate, TIME_UNITS.DAY, timezone);
+  const e = includeEnd ? endOf(endDate, TIME_UNITS.DAY, timezone) : startOf(endDate, TIME_UNITS.DAY, timezone);
   
-  if (isSame(d, e, 'day')) return false;
+  if (isSame(d, e, TIME_UNITS.DAY)) return false;
   
   return (
-    (isSameOrBefore(s, d, 'day') && isAfter(e, d, 'day')) ||
-    (isBefore(s, d, 'day') && isSameOrAfter(e, d, 'day')) ||
-    isSame(s, d, 'day')
+    (isSameOrBefore(s, d, TIME_UNITS.DAY) && isAfter(e, d, TIME_UNITS.DAY)) ||
+    (isBefore(s, d, TIME_UNITS.DAY) && isSameOrAfter(e, d, TIME_UNITS.DAY)) ||
+    isSame(s, d, TIME_UNITS.DAY)
   );
 }
 
@@ -1456,10 +1458,10 @@ export function getOverlapDays(
   range2End: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): NonNegativeInteger {
-  const r1Start = startOf(range1Start, 'day', timezone);
-  const r1End = startOf(range1End, 'day', timezone);
-  const r2Start = startOf(range2Start, 'day', timezone);
-  const r2End = startOf(range2End, 'day', timezone);
+  const r1Start = startOf(range1Start, TIME_UNITS.DAY, timezone);
+  const r1End = startOf(range1End, TIME_UNITS.DAY, timezone);
+  const r2Start = startOf(range2Start, TIME_UNITS.DAY, timezone);
+  const r2End = startOf(range2End, TIME_UNITS.DAY, timezone);
   
   const overlapStart = moment.max(r1Start, r2Start);
   const overlapEnd = moment.min(r1End, r2End);
@@ -1481,10 +1483,10 @@ export function doRangesOverlap(
   range2End: DateInput,
   timezone: Timezone = DEFAULT_TIMEZONE,
 ): boolean {
-  const r1Start = startOf(range1Start, 'day', timezone);
-  const r1End = startOf(range1End, 'day', timezone);
-  const r2Start = startOf(range2Start, 'day', timezone);
-  const r2End = startOf(range2End, 'day', timezone);
+  const r1Start = startOf(range1Start, TIME_UNITS.DAY, timezone);
+  const r1End = startOf(range1End, TIME_UNITS.DAY, timezone);
+  const r2Start = startOf(range2Start, TIME_UNITS.DAY, timezone);
+  const r2End = startOf(range2End, TIME_UNITS.DAY, timezone);
   
   return r1Start.isBefore(r2End) && r2Start.isBefore(r1End);
 }
