@@ -55,12 +55,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digistayai/date-utils.git"
+    "url": "git+https://github.com/vishalmeena2211/timezone-date-utils.git"
   },
   "bugs": {
-    "url": "https://github.com/digistayai/date-utils/issues"
+    "url": "https://github.com/vishalmeena2211/timezone-date-utils/issues"
   },
-  "homepage": "https://github.com/digistayai/date-utils#readme",
+  "homepage": "https://github.com/vishalmeena2211/timezone-date-utils#readme",
   "peerDependencies": {
     "moment-timezone": "^0.5.48"
   },

@@ -661,7 +661,7 @@ DigiStay
 
 ## 🐛 Issues
 
-Report issues at: https://github.com/digistayai/date-utils/issues
+Report issues at: https://github.com/vishalmeena2211/timezone-date-utils/issues
 
 ## 🤝 Contributing
 

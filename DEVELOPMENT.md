@@ -5,8 +5,8 @@ A comprehensive date and time utility library for both frontend and backend Java
 ## Quick Links
 
 - [NPM Package](https://www.npmjs.com/package/timezone-date-utils)
-- [GitHub Repository](https://github.com/digistayai/date-utils)
-- [Documentation](https://github.com/digistayai/date-utils#readme)
+- [GitHub Repository](https://github.com/vishalmeena2211/timezone-date-utils)
+- [Documentation](https://github.com/vishalmeena2211/timezone-date-utils#readme)
 
 ## Installation & Usage
 
